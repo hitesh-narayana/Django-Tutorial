@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <h1>Welcome to Django Training</h1>
+    <p>This is the home page of the Django Training project.</p>
+
+    <div>
+        {% for room in rooms %}
+            <div>
+                <h2>{{ room.name }}</h2>
+                <p>{{ room.status}}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
