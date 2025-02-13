@@ -3,9 +3,6 @@ from .models import Room, Booking
 from datetime import date
 # Create your tests here.
 
-
-
-
 class BookingModelTest(TestCase):
 
     def setUp(self):
