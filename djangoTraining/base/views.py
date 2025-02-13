@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
-from .models import Room, Booking
+from .models import Room,Booking
 from .forms import BookingForm
 
 # Create your views here.
@@ -18,11 +18,7 @@ from .forms import BookingForm
 def home(request):
     rooms = Room.objects.all()
     bookings = Booking.objects.all()
-    room_bookings = {}
-
-    for room in rooms:
-        room_bookings[room.id] = bookings.filter(room=room)
-
+    room_bookings = {room.id: room.booking_set.all() for room in rooms}
     context = {'rooms': rooms, 'room_bookings': room_bookings}
     return render(request, 'home.html', context)
 
@@ -35,5 +31,15 @@ def room(request,pk):
 
 def bookings(request):
    form = BookingForm()
+   if request.method == 'POST':
+       print(request.POST)
+       form = BookingForm(request.POST)
+       if form.is_valid():
+           booking = form.save()
+
+           room = booking.room
+           room.status = 'Closed'
+           room.save()
+           return redirect('home')
    context ={'form':form}
    return render(request,'booking_form.html',context)
