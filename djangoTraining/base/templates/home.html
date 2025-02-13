@@ -1,5 +1,7 @@
 {% extends 'main.html' %}
 
+{% load customfilter %}  
+
 {% block content %}
     <h1>Welcome to Django Training</h1>
     <p>This is the home page of the Django Training project.</p>
@@ -7,8 +9,16 @@
     <div>
         {% for room in rooms %}
             <div>
-                <a href="{% url 'room' room.id %}">{{ room.name }}</a>
-                <p>{{ room.status}}</p>
+                <h3>{{ room.id }} .  <a href="{% url 'room' room.id %}">{{ room.name }}</a></h3>
+                
+                <div>
+                    <p>{{ room.status }}</p>
+                    {% for booking in room_bookings|get_item:room.id %}
+                        <p>{{ booking.guest_name }} ({{ booking.start_date }} - {{ booking.end_date }})</p>
+                    {% empty %}
+                        <p>No bookings yet.</p>
+                    {% endfor %}
+                </div>
             </div>
         {% endfor %}
     </div>
